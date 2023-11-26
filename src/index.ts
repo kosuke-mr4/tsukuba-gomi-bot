@@ -1,8 +1,9 @@
 import { GatewayIntentBits, Client, Partials, Message } from "discord.js";
 import dotenv from "dotenv";
 
-import { COMMAND_PREFIX, COMMANDS } from "./constants/commands";
+import { COMMAND_PREFIX } from "./constants/commands";
 import { commands } from "./commands/handler";
+import { notifyCommand } from "./commands/notify";
 
 dotenv.config();
 
@@ -22,10 +23,7 @@ client.once("ready", () => {
   if (client.user) {
     console.log(client.user.tag);
   }
-  const notifyCommandToRun = commands.get(COMMANDS.NOTIFY);
-  if (notifyCommandToRun) {
-    notifyCommandToRun(client);
-  }
+  notifyCommand(client, process.env.NOTIFY_CHANNEL_ID as string);
 });
 
 client.on("messageCreate", async (message: Message) => {
@@ -35,9 +33,16 @@ client.on("messageCreate", async (message: Message) => {
   const command = args[0];
   const subCommand = args[1];
 
-  if (command === COMMAND_PREFIX && commands.has(subCommand)) {
-    const commandToRun = commands.get(subCommand);
-    await commandToRun(message);
+  if (command === COMMAND_PREFIX) {
+    if (commands.has(subCommand)) {
+      const commandToRun = commands.get(subCommand);
+      await commandToRun(message);
+    } else {
+      console.log("command not found");
+      await message.channel.send(
+        "正しいコマンドではありません、`!help`でコマンド一覧を確認してください"
+      );
+    }
   }
 });
 

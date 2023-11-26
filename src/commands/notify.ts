@@ -1,7 +1,7 @@
 import { Client, TextChannel } from "discord.js";
 
-export const notifyCommand = async (client: Client) => {
-  const channel = client.channels.cache.get("channelId") as TextChannel;
+export const notifyCommand = async (client: Client, channelId: string) => {
+  const channel = client.channels.cache.get(channelId) as TextChannel;
   const now = new Date();
   let millisTill8 = new Date(
     now.getFullYear(),

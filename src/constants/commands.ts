@@ -7,5 +7,4 @@ export const COMMANDS = {
   SETAREA: "setarea",
   MYAREA: "myarea",
   SHOWAREA: "showarea",
-  NOTIFY: "notify",
 };
