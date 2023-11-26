@@ -1,7 +1,7 @@
 import { GatewayIntentBits, Client, Partials, Message } from "discord.js";
 import dotenv from "dotenv";
 
-import { COMMAND_PREFIX } from "./constants/commands";
+import { COMMAND_PREFIX, COMMANDS } from "./constants/commands";
 import { commands } from "./commands/handler";
 
 dotenv.config();
@@ -21,6 +21,10 @@ client.once("ready", () => {
   console.log("Ready!");
   if (client.user) {
     console.log(client.user.tag);
+  }
+  const notifyCommandToRun = commands.get(COMMANDS.NOTIFY);
+  if (notifyCommandToRun) {
+    notifyCommandToRun(client);
   }
 });
 
