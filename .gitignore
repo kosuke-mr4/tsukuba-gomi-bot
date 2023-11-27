@@ -1,5 +1,8 @@
 # https://github.com/github/gitignore/blob/main/Node.gitignore
 
+#macos
+.DS_Store
+
 # stored data
 src/data/*.csv
 # Logs
