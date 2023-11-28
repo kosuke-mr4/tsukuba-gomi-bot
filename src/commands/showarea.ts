@@ -6,7 +6,7 @@ const { parse } = require("csv-parse/sync");
 export const showareaCommand = async (message: Message) => {
   const date = new Date();
   const year = date.getFullYear();
-  const month = date.getMonth();
+  const month = date.getMonth() + 1;
   const fileName = `src/data/${year}${month}.csv`;
 
   fs.access(fileName, fs.constants.F_OK, (err) => {

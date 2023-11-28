@@ -18,7 +18,7 @@ export const setupCommand = async (message: Message) => {
 async function getGomiData(message: Message) {
   const date = new Date();
   const year = date.getFullYear();
-  const month = date.getMonth();
+  const month = date.getMonth() + 1;
 
   let monthCount = month;
   while (true) {
