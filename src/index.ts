@@ -38,9 +38,8 @@ client.on("messageCreate", async (message: Message) => {
       const commandToRun = commands.get(subCommand);
       await commandToRun(message);
     } else {
-      console.log("command not found");
       await message.channel.send(
-        "正しいコマンドではありません、`!help`でコマンド一覧を確認してください"
+        "正しいコマンドではありません、`!gomi help`でコマンド一覧を確認してください"
       );
     }
   }

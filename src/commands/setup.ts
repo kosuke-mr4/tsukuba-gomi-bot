@@ -9,13 +9,13 @@ export const setupCommand = async (message: Message) => {
   await message.channel.send(
     "botをセットアップしています... 終了次第お知らせします。"
   );
-  await getGomiData();
+  await getGomiData(message);
   await message.channel.send(
     'botのセットアップが完了しました。現在は対象エリアを "春日" にしています。他エリアを指定したい場合 !gomi setarea "対象エリア" で指定してください。エリアの名称がわからない場合、!gomi showarea の表示結果から確認してください'
   );
 };
 
-async function getGomiData() {
+async function getGomiData(message: Message) {
   const date = new Date();
   const year = date.getFullYear();
   const month = date.getMonth();
@@ -26,7 +26,9 @@ async function getGomiData() {
       `${GOMI_BASE_URL}${year}${monthCount}${GOMI_TAIL_URL}`
     );
     if (!response.ok) {
-      //   throw new Error(`Failed to download file, status: ${response.status}`);
+      await message.channel.send(
+        "データの取得に失敗しました、時間をおいて再度実行してください"
+      );
       break;
     } else {
       await downloadAndSaveFile(
@@ -50,6 +52,4 @@ async function downloadAndSaveFile(
   const csvData = await workbook.csv.writeBuffer();
 
   fs.writeFileSync(saveTo, csvData.toString());
-
-  //   console.log(`ファイルがダウンロードされ、${saveTo} に保存されました。`);
 }
