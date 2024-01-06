@@ -21,14 +21,19 @@ async function getGomiData(message: Message) {
   const month = date.getMonth() + 1;
 
   let monthCount = month;
+
   while (true) {
     const response = await fetch(
-      `${GOMI_BASE_URL}${year}${monthCount}${GOMI_TAIL_URL}`
+      `${GOMI_BASE_URL}${year}${monthCount
+        .toString()
+        .padStart(2, "0")}${GOMI_TAIL_URL}`
     );
-    if (!response.ok) {
+    if (!response.ok && response.status !== 404) {
       await message.channel.send(
         "データの取得に失敗しました、時間をおいて再度実行してください"
       );
+      break;
+    } else if (response.status === 404) {
       break;
     } else {
       await downloadAndSaveFile(
