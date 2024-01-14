@@ -5,22 +5,27 @@ const { parse } = require("csv-parse/sync");
 
 export const notifyCommand = async (client: Client, channelId: string) => {
   const channel = client.channels.cache.get(channelId) as TextChannel;
-  const now = new Date();
-  let millisTill8 = new Date(
-    now.getFullYear(),
-    now.getMonth(),
-    now.getDate(),
-    8, // 8時に通知
-    0,
-    0,
-    0
-  ).getTime();
-  if (millisTill8 < now.getTime()) {
-    millisTill8 += 86400000;
-  }
-  setTimeout(function () {
-    sendNotification(channel);
-  }, millisTill8 - now.getTime());
+  const notify = () => {
+    const now = new Date();
+    let millisTill8 = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate(),
+      8, // 8時に通知
+      0,
+      0,
+      0
+    ).getTime();
+    if (millisTill8 < now.getTime()) {
+      millisTill8 += 86400000; // 1日後（ミリ秒）
+    }
+    setTimeout(function () {
+      sendNotification(channel);
+      notify(); // 再帰的に呼び出す
+    }, millisTill8 - now.getTime());
+  };
+
+  notify(); // 初回実行
 };
 
 async function sendNotification(channel: TextChannel) {
